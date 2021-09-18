@@ -1,0 +1,26 @@
+server:
+  port: 8082
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8010/eureka
+spring:
+  application:
+    name: apigateway
+  cloud:
+    gateway:
+      routes:
+        - id: users-status-check
+          uri: lb://user-ws
+          predicates:
+            - Path=/user/**
+            - Method=GET
+          filters:
+            - RewritePath=/user/(?<segment>.*), /users/$\{segment}
+        - id: users-status-check1
+          uri: lb://user-ws
+          predicates:
+              - Path=/users/**
+              - Method=GET
+
+
